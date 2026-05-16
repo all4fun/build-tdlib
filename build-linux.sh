@@ -41,12 +41,13 @@ php SplitSource.php --undo
 # 返回 repo root 验证输出
 cd ..
 echo "=== Build Output ==="
-if [ -d tdlib ]; then
-  ls -la tdlib/
-elif [ -d td/tdlib ]; then
+# 构建产物实际在 td/tdlib（安装路径是 ../../../tdlib）
+if [ -d "td/tdlib/bin" ]; then
   ls -la td/tdlib/
+  ls -la td/tdlib/bin/
 else
-  echo "ERROR: tdlib directory not found"
+  echo "ERROR: td/tdlib/bin not found"
+  find . -name "tdlib" -type d 2>/dev/null || true
   exit 1
 fi
 echo "=== Build Complete ==="
