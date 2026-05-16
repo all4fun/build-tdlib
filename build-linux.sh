@@ -35,10 +35,11 @@ cmake -DCMAKE_BUILD_TYPE=Release \
 cmake --build . --target install -- -j"$(nproc)"
 cd ../../..
 
-# 恢复源码
+# 恢复源码（在 td 目录下）
 php SplitSource.php --undo
 
-# 验证输出
+# 返回 repo root 验证输出
+cd ..
 echo "=== Build Output ==="
-ls -la td/tdlib/
+ls -la tdlib/
 echo "=== Build Complete ==="

@@ -41,7 +41,8 @@ cmake -A x64 \
 cmake --build . --target install --config Release
 cd ../../..
 
-# 验证输出
+# 返回 repo root 验证输出
+cd ..
 echo "=== Build Output ==="
-ls -la td/tdlib/
+ls -la tdlib/
 echo "=== Build Complete ==="

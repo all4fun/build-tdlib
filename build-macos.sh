@@ -34,7 +34,8 @@ cmake -DCMAKE_BUILD_TYPE=Release \
 cmake --build . --target install -- -j"$(sysctl -n hw.ncpu)"
 cd ../../..
 
-# 验证输出
+# 返回 repo root 验证输出
+cd ..
 echo "=== Build Output ==="
-ls -la td/tdlib/
+ls -la tdlib/
 echo "=== Build Complete ==="
