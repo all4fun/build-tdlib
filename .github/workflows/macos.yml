@@ -44,11 +44,15 @@ jobs:
       run: /bin/bash build-macos.sh
 
     - name: Package tdlib artifacts
-      env:
-        OS_NAME: ${{ runner.os }}
       run: |
         set -e
         ARCH=$(uname -m)
+        # Normalize arch names
+        if [ "$ARCH" = "x86_64" ]; then
+          ARCH="amd64"
+        elif [ "$ARCH" = "aarch64" ]; then
+          ARCH="arm64"
+        fi
         echo "ARCH=$ARCH" >> $GITHUB_ENV
         if [ -d tdlib ]; then
           ARTIFACT_DIR=tdlib
@@ -57,18 +61,18 @@ jobs:
         else
           echo "Artifact directory not found" && ls -la && exit 1
         fi
-        # Add version to artifact name if triggered by tag
-        if [[ "$GITHUB_REF" == refs/tags/* ]]; then
-          VERSION="${GITHUB_REF#refs/tags/}"
-          TAR_NAME="tdlib-${VERSION}-${OS_NAME}-${ARCH}.tar.gz"
-        else
-          TAR_NAME="tdlib-${OS_NAME}-${ARCH}.tar.gz"
-        fi
+        TAR_NAME="tdlib-mac-${ARCH}.tar.gz"
+        # Prepare package directory with README
+        mkdir -p package
         if [ "$ARTIFACT_DIR" = "td/tdlib" ]; then
-          tar -czf "$TAR_NAME" -C td tdlib example/java
+          cp -r td/tdlib package/
+          cp -r td/example/java/org package/
         else
-          tar -czf "$TAR_NAME" -C . tdlib td/example/java/org
+          cp -r tdlib package/
+          cp -r td/example/java/org package/java/
         fi
+        cp README.md package/
+        tar -czf "$TAR_NAME" -C package .
         echo "PACKAGE_FILE=$TAR_NAME" >> $GITHUB_ENV
         shasum -a 256 "$TAR_NAME"
 
