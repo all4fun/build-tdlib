@@ -57,9 +57,9 @@ jobs:
         # Add version to artifact name if triggered by tag
         if [[ "$GITHUB_REF" == refs/tags/* ]]; then
           VERSION="${GITHUB_REF#refs/tags/}"
-          TAR_NAME="tdlib-${VERSION}-mac-${ARCH}.tar.gz"
+          TAR_NAME="tdlib-${VERSION}-macos-${ARCH}.tar.gz"
         else
-          TAR_NAME="tdlib-mac-${ARCH}.tar.gz"
+          TAR_NAME="tdlib-macos-${ARCH}.tar.gz"
         fi
         # Prepare package directory with README
         mkdir -p package
