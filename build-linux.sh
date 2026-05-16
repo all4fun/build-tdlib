@@ -41,5 +41,12 @@ php SplitSource.php --undo
 # 返回 repo root 验证输出
 cd ..
 echo "=== Build Output ==="
-ls -la tdlib/
+if [ -d tdlib ]; then
+  ls -la tdlib/
+elif [ -d td/tdlib ]; then
+  ls -la td/tdlib/
+else
+  echo "ERROR: tdlib directory not found"
+  exit 1
+fi
 echo "=== Build Complete ==="
