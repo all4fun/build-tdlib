@@ -61,7 +61,7 @@ jobs:
         if [ "$ARTIFACT_DIR" = "td/tdlib" ]; then
           tar -czf "$TAR_NAME" -C td tdlib example/java
         else
-          tar -czf "$TAR_NAME" -C . tdlib td/example/java
+          tar -czf "$TAR_NAME" -C . tdlib td/example/java/org
         fi
         echo "PACKAGE_FILE=$TAR_NAME" >> $GITHUB_ENV
         shasum -a 256 "$TAR_NAME"
@@ -123,7 +123,7 @@ jobs:
         if [ "$ARTIFACT_DIR" = "td/tdlib" ]; then
           tar -czf "$TAR_NAME" -C td tdlib example/java
         else
-          tar -czf "$TAR_NAME" -C . tdlib td/example/java
+          tar -czf "$TAR_NAME" -C . tdlib td/example/java/org
         fi
         echo "PACKAGE_FILE=$TAR_NAME" >> $GITHUB_ENV
         shasum -a 256 "$TAR_NAME"

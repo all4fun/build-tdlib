@@ -68,7 +68,7 @@ jobs:
         if [ "$ARTIFACT_DIR" = "td/tdlib" ]; then
           tar -czf "$TAR_NAME" -C td tdlib example/java
         else
-          tar -czf "$TAR_NAME" -C . tdlib td/example/java
+          tar -czf "$TAR_NAME" -C . tdlib td/example/java/org
         fi
         echo "PACKAGE_FILE=$TAR_NAME" >> $GITHUB_ENV
         sha256sum "$TAR_NAME"
