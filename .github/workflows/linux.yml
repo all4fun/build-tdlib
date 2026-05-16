@@ -45,8 +45,13 @@ jobs:
           ARCH="arm64"
         fi
         echo "ARCH=$ARCH" >> $GITHUB_ENV
-
-        TAR_NAME="tdlib-linux-${ARCH}.tar.gz"
+        # Add version to artifact name if triggered by tag
+        if [[ "$GITHUB_REF" == refs/tags/* ]]; then
+          VERSION="${GITHUB_REF#refs/tags/}"
+          TAR_NAME="tdlib-${VERSION}-linux-${ARCH}.tar.gz"
+        else
+          TAR_NAME="tdlib-linux-${ARCH}.tar.gz"
+        fi
         # Prepare package directory with README
         mkdir -p package
 
@@ -99,8 +104,13 @@ jobs:
           ARCH="arm64"
         fi
         echo "ARCH=$ARCH" >> $GITHUB_ENV
-
-        TAR_NAME="tdlib-linux-${ARCH}.tar.gz"
+        # Add version to artifact name if triggered by tag
+        if [[ "$GITHUB_REF" == refs/tags/* ]]; then
+          VERSION="${GITHUB_REF#refs/tags/}"
+          TAR_NAME="tdlib-${VERSION}-linux-${ARCH}.tar.gz"
+        else
+          TAR_NAME="tdlib-linux-${ARCH}.tar.gz"
+        fi
         # Prepare package directory with README
         mkdir -p package
 
