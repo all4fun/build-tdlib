@@ -57,7 +57,13 @@ jobs:
         else
           echo "Artifact directory not found" && ls -la && exit 1
         fi
-        TAR_NAME="tdlib-${OS_NAME}-${ARCH}.tar.gz"
+        # Add version to artifact name if triggered by tag
+        if [[ "$GITHUB_REF" == refs/tags/* ]]; then
+          VERSION="${GITHUB_REF#refs/tags/}"
+          TAR_NAME="tdlib-${VERSION}-${OS_NAME}-${ARCH}.tar.gz"
+        else
+          TAR_NAME="tdlib-${OS_NAME}-${ARCH}.tar.gz"
+        fi
         if [ "$ARTIFACT_DIR" = "td/tdlib" ]; then
           tar -czf "$TAR_NAME" -C td tdlib example/java
         else
