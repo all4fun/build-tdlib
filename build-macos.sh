@@ -1,26 +1,40 @@
 #!/bin/bash
 # author: wh
-# date: 2025-11-11
+# date: 2025-05-16
 # docs: https://tdlib.github.io/td/build.html?language=Java
 
-# xcode-select --install
-# /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-brew install gperf cmake openssl coreutils
-brew install openjdk
-git clone --branch master https://github.com/tdlib/td.git
+set -euo pipefail
+
+# 安装依赖
+brew install gperf cmake openssl coreutils openjdk
+
+# 克隆 TDLib
+git clone --branch master --depth 1 https://github.com/tdlib/td.git
 cd td
-rm -rf build
-mkdir build
-cd build
-cmake -DCMAKE_BUILD_TYPE=Release -DJAVA_HOME=/opt/homebrew/opt/openjdk/libexec/openjdk.jdk/Contents/Home/ -DOPENSSL_ROOT_DIR=/opt/homebrew/opt/openssl/ -DCMAKE_INSTALL_PREFIX:PATH=../example/java/td -DTD_ENABLE_JNI=ON ..
-cmake --build . --target install
+
+# 第一阶段：构建 TDLib core
+rm -rf build && mkdir build && cd build
+cmake -DCMAKE_BUILD_TYPE=Release \
+      -DJAVA_HOME=/opt/homebrew/opt/openjdk/libexec/openjdk.jdk/Contents/Home/ \
+      -DOPENSSL_ROOT_DIR=/opt/homebrew/opt/openssl/ \
+      -DCMAKE_INSTALL_PREFIX:PATH=../example/java/td \
+      -DTD_ENABLE_JNI=ON \
+      ..
+cmake --build . --target install -- -j"$(sysctl -n hw.ncpu)"
 cd ..
+
+# 第二阶段：构建 Java JNI 绑定
 cd example/java
-rm -rf build
-mkdir build
-cd build
-cmake -DCMAKE_BUILD_TYPE=Release -DJAVA_HOME=/opt/homebrew/opt/openjdk/libexec/openjdk.jdk/Contents/Home/ -DCMAKE_INSTALL_PREFIX:PATH=../../../tdlib -DTd_DIR:PATH=$(greadlink -e ../td/lib/cmake/Td) ..
-cmake --build . --target install
+rm -rf build && mkdir build && cd build
+cmake -DCMAKE_BUILD_TYPE=Release \
+      -DJAVA_HOME=/opt/homebrew/opt/openjdk/libexec/openjdk.jdk/Contents/Home/ \
+      -DCMAKE_INSTALL_PREFIX:PATH=../../../tdlib \
+      -DTd_DIR:PATH=$(greadlink -e ../td/lib/cmake/Td) \
+      ..
+cmake --build . --target install -- -j"$(sysctl -n hw.ncpu)"
 cd ../../..
-cd ..
-ls -l td/tdlib
+
+# 验证输出
+echo "=== Build Output ==="
+ls -la td/tdlib/
+echo "=== Build Complete ==="
