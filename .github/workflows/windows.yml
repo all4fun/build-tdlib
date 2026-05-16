@@ -62,7 +62,11 @@ jobs:
           echo "Artifact directory not found" && ls -la && exit 1
         fi
         TAR_NAME="tdlib-${OS_NAME}-${ARCH}.tar.gz"
-        tar -czf "$TAR_NAME" -C "$(dirname "$ARTIFACT_DIR")" "$(basename "$ARTIFACT_DIR")"
+        if [ "$ARTIFACT_DIR" = "td/tdlib" ]; then
+          tar -czf "$TAR_NAME" -C td tdlib example/java
+        else
+          tar -czf "$TAR_NAME" -C . tdlib td/example/java
+        fi
         echo "PACKAGE_FILE=$TAR_NAME" >> $GITHUB_ENV
         sha256sum "$TAR_NAME"
 
