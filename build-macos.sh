@@ -32,7 +32,7 @@ rm -rf build && mkdir build && cd build
 cmake -DCMAKE_BUILD_TYPE=Release \
       -DJAVA_HOME=/opt/homebrew/opt/openjdk/libexec/openjdk.jdk/Contents/Home/ \
       -DCMAKE_INSTALL_PREFIX:PATH=../../../tdlib \
-      -DTd_DIR:PATH=$(greadlink -e ../td/lib/cmake/Td) \
+      -DTd_DIR:PATH="$PWD/../td/lib/cmake/Td" \
       ..
 cmake --build . --target install -- -j"$(sysctl -n hw.ncpu)"
 cd ../../..
