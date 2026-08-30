@@ -20,15 +20,6 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Cache TDLib build
-      uses: actions/cache@v4
-      with:
-        path: |
-          td/build
-          td/example/java/build
-        key: tdlib-linux-x86_64-${{ github.sha }}
-        restore-keys: tdlib-linux-x86_64-
-
     - name: Build tdlib for Linux x86_64
       run: /bin/bash build-linux.sh
 
@@ -78,15 +69,6 @@ jobs:
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
-
-    - name: Cache TDLib build
-      uses: actions/cache@v4
-      with:
-        path: |
-          td/build
-          td/example/java/build
-        key: tdlib-linux-arm64-${{ github.sha }}
-        restore-keys: tdlib-linux-arm64-
 
     - name: Build tdlib for Linux ARM64
       run: /bin/bash build-linux.sh

@@ -28,20 +28,9 @@ jobs:
     - name: Cache vcpkg
       uses: actions/cache@v4
       with:
-        path: |
-          td/vcpkg
-          ~/.cache/vcpkg
+        path: ~/.cache/vcpkg
         key: vcpkg-windows-${{ hashFiles('build-windows.sh') }}
         restore-keys: vcpkg-windows-
-
-    - name: Cache TDLib build
-      uses: actions/cache@v4
-      with:
-        path: |
-          td/build
-          td/example/java/build
-        key: tdlib-windows-${{ github.sha }}
-        restore-keys: tdlib-windows-
 
     - name: Build tdlib for windows
       shell: bash
