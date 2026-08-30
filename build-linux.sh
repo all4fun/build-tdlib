@@ -9,9 +9,12 @@ set -euo pipefail
 sudo apt-get update
 sudo apt-get install -y make git zlib1g-dev libssl-dev gperf php-cli cmake default-jdk g++
 
-# 克隆 TDLib
-git clone --branch master --depth 1 https://github.com/tdlib/td.git
+# 克隆 TDLib 1.8.67 对应提交并应用上游构建修复
+TDLIB_COMMIT="bc9c263e2bfee06aaab41e82db51a103376030bc"
+git clone https://github.com/tdlib/td.git
 cd td
+git checkout "$TDLIB_COMMIT"
+git apply ../patches/tdlib-1.8.67-build-fixes.patch
 
 # 使用 SplitSource 优化编译（减少内存占用）
 php SplitSource.php

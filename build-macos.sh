@@ -8,9 +8,12 @@ set -euo pipefail
 # 安装依赖
 brew install gperf cmake openssl coreutils openjdk
 
-# 克隆 TDLib
-git clone --branch master --depth 1 https://github.com/tdlib/td.git
+# 克隆 TDLib 1.8.67 对应提交并应用上游构建修复
+TDLIB_COMMIT="bc9c263e2bfee06aaab41e82db51a103376030bc"
+git clone https://github.com/tdlib/td.git
 cd td
+git checkout "$TDLIB_COMMIT"
+git apply ../patches/tdlib-1.8.67-build-fixes.patch
 
 # 第一阶段：构建 TDLib core
 rm -rf build && mkdir build && cd build
